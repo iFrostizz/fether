@@ -1,0 +1,12 @@
+[package]
+name = "fether"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "main"
+path = "rust/main.rs"
+
+[dependencies]
+inquire = "0.3.0-alpha.2"
+

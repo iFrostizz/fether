@@ -1,6 +1,11 @@
 # This is my contribution to the ethernaut challenges !
 
-This repo was written using the solidity framework dapp.tools.
+Solve the ethernaut challenges locally
 
-As an objective, I would like to create a tool to help newcomers solve these challenges using dapp.tools.
+Start by doing 
 
+`cargo build`
+
+Then run our wizard using
+
+`cargo run`

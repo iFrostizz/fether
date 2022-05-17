@@ -1,2 +1,7 @@
 cache/
 out/
+
+#don't commit temp files for vim folks
+*~
+*.swp
+*.swo

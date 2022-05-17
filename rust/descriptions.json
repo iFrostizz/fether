@@ -1,0 +1,137 @@
+{
+  "0. Hello Fether": {
+    "name": "Hello Fether",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "1. Fallback": {
+    "name": "Fallback",
+    "description": "Look carefully at the contract's code below.\nYou will beat this level if: \n1.you claim ownership of the contract\n2.you reduce its balance to 0",
+    "difficulty": 1
+  },
+  "2. Fallout": {
+    "name": "Fallout",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "3. Coin Flip": {
+    "name": "Coin Flip",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "4. Telephone": {
+    "name": "Telephone",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "5. Token": {
+    "name": "Token",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "6. Delegation": {
+    "name": "Delegation",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "7. Force": {
+    "name": "Force",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "8. Vault": {
+    "name": "Vault",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "9. King": {
+    "name": "King",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "10. Re-entrancy": {
+    "name": "Re-entrancy",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "11. Elevator": {
+    "name": "Elevator",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "12. Privacy": {
+    "name": "Privacy",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "13. Gatekeeper One": {
+    "name": "Gatekeeper One",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "14. Gatekeeper Two": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "15. Naught Coin": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "16. Preservation": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "17. Recovery": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "18. MagicNumber": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "19. Aline Coder": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "20. Denial": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "21. Shop": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "22. Dex": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "23. Dex Two": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "24. Puzzle Wallet": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "25. Motorbike": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  },
+  "26. DoubleEntryPoint": {
+    "name": "this is my name",
+    "description": "my description",
+    "difficulty": 10
+  }
+}

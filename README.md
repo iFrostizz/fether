@@ -9,3 +9,7 @@ Start by doing
 Then run our wizard using
 
 `cargo run`
+
+TODO:
+
+[ ] Switch to solidity 0.6.0

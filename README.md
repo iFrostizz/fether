@@ -12,4 +12,4 @@ Then run our wizard using
 
 TODO:
 
-[ ] Switch to solidity 0.6.0
+- [ ] Switch to solidity 0.6.0

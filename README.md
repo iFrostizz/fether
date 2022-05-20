@@ -1,4 +1,4 @@
-![GitHub CI](https://github.com/iFrostizz/fether/.github/workflows/ci.yml/badge.svg)
+[![CI](https://github.com/iFrostizz/fether/actions/workflows/ci.yml/badge.svg)](https://github.com/iFrostizz/fether/actions/workflows/ci.yml)
 
 # This is my contribution to the ethernaut challenges !
 

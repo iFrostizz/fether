@@ -1,1 +1,4 @@
-TestContract:testBar() (gas: 401)
+CoinFlipTest:testAttack() (gas: 88949)
+FallbackTest:testAttack() (gas: 64065)
+FalloutTest:testAttack() (gas: 36629)
+FalloutTest:testAttack() (gas: 22687)

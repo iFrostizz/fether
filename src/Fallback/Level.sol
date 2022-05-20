@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.6.0;
 
-import '@openzeppelin/contracts/utils/math/SafeMath.sol';
+import '../utils/SafeMath.sol';
 
 contract Fallback {
 
@@ -9,14 +9,14 @@ contract Fallback {
   mapping(address => uint) public contributions;
   address payable public owner;
 
-  constructor() {
-    owner = payable(msg.sender);
+  constructor() public {
+    owner = msg.sender;
     contributions[msg.sender] = 1000 * (1 ether);
   }
 
   modifier onlyOwner {
         require(
-            payable(msg.sender) == owner,
+            msg.sender == owner,
             "caller is not the owner"
         );
         _;
@@ -24,23 +24,22 @@ contract Fallback {
 
   function contribute() public payable {
     require(msg.value < 0.001 ether);
-    contributions[payable(msg.sender)] += msg.value;
-    if(contributions[payable(msg.sender)] > contributions[owner]) {
-      owner = payable(msg.sender);
+    contributions[msg.sender] += msg.value;
+    if(contributions[msg.sender] > contributions[owner]) {
+      owner = msg.sender;
     }
   }
 
   function getContribution() public view returns (uint) {
-    return contributions[payable(msg.sender)];
+    return contributions[msg.sender];
   }
 
   function withdraw() public onlyOwner {
-    owner.transfer(payable(this).balance);
+    owner.transfer(address(this).balance);
   }
 
   receive() external payable {
-    require(msg.value > 0 && contributions[payable(msg.sender)] > 0);
-    owner = payable(msg.sender);
+    require(msg.value > 0 && contributions[msg.sender] > 0);
+    owner = msg.sender;
   }
 }
-

@@ -1,5 +1,6 @@
 cache/
 out/
+target/
 
 #don't commit temp files for vim folks
 *~

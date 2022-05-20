@@ -1,6 +1,7 @@
 cache/
 out/
 target/
+.idea/
 
 #don't commit temp files for vim folks
 *~

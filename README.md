@@ -15,3 +15,4 @@ Then run our wizard using
 TODO:
 
 - [x] Switch to solidity 0.6.0
+- [ ] Finish solving all levels

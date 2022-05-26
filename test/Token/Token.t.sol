@@ -1,40 +1,41 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
-import "tests/Test.sol";
-import "../../src/Token/Level.sol";
-import "forge-std/console.sol";
+import {LevelFactory} from "../utils/LevelFactory.sol";
+import {Token} from "../../src/Token/Level.sol";
 
 interface IToken {
-    function transfer(address _to, uint _value) external returns (bool);
+  function transfer(address _to, uint _value) external returns (bool);
 
-    function balanceOf(address _owner) external view returns (uint balance);
+  function balanceOf(address _owner) external view returns (uint balance);
 }
 
-contract TokenTest is Test {
-    IToken token;
+contract TokenTest is LevelFactory {
+  IToken token;
 
-    address deployer = address(100);
-    address attacker = address(101);
+  function setUp() public {
+    vm.prank(deployer); // deploy the contract as deployer
+    token = IToken(address(new Token(10 ether)));
+    token.transfer(attacker, 20);
+  }
 
-    function setUp() public {
-        vm.prank(deployer); // deploy the contract as deployer
-        token = IToken(address(new Token(10 ether)));
-        token.transfer(attacker, 20);
-    }
+  function testAttack() public {
+    submitLevel("Token");
+  }
 
-    function testAttack() public {
-        /* Setup stuff, no need to touch */
-        vm.startPrank(attacker);
-        vm.deal(attacker, 5 ether);
+  function _performTest() internal override {
+    token.transfer(address(102), token.balanceOf(deployer));
+  }
 
-        /* Write your code here */
-        token.transfer(address(102), token.balanceOf(deployer));
-        /* Write your code here */ 
+  function _setupTest() internal override {
+    super._setupTest();
+  }
 
-        /* Validating the test */
-        assertGt(token.balanceOf(attacker), 20);
-    }
+  function _checkTest() internal override returns (bool) {
+    assertGt(token.balanceOf(attacker), 20);
+
+    return token.balanceOf(attacker) > 20;
+  }
 }
 
 

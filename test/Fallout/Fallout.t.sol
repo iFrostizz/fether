@@ -1,37 +1,40 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
-import "tests/Test.sol";
-import "../../src/Fallout/Level.sol";
-import "forge-std/console.sol";
+import {LevelFactory} from "../utils/LevelFactory.sol";
+import {Fallout} from "../../src/Fallout/Level.sol";
 
 interface IFallout {
-    function Fal1out() external payable;
+  function Fal1out() external payable;
 
-    function owner() external view returns(address);
+  function owner() external view returns(address);
 }
 
-contract FalloutTest is Test {
-    IFallout fallout;
+contract FalloutTest is LevelFactory {
+  IFallout fallout;
 
-    address deployer = address(100);
-    address attacker = address(101);
+  function setUp() public {
+    vm.prank(deployer); // deploy the contract as deployer
+    fallout = IFallout(address(new Fallout()));
+  }
 
-    function setUp() public {
-        vm.prank(deployer); // deploy the contract as deployer
-        fallout = IFallout(address(new Fallout()));
-    }
+  function testAttack() public {
+    submitLevel("Fallout");
+  }
 
-    function testAttack() public {
-        /* Setup stuff, no need to touch */
-        vm.startPrank(attacker);
-        vm.deal(attacker, 5 ether);
+  function _performTest() internal override {
+    /* Write your code here */
+    fallout.Fal1out(); // is that a constructor, LOL ?
+  }
 
-        /* Write your code here */
-        fallout.Fal1out(); // is that a constructor, LOL ?
-        /* Write your code here */ 
+  function _setupTest() internal override {
+    super._setupTest();
+  }
 
-        /* Validating the test */
-        assertEq(fallout.owner(), attacker);
-    }
+  function _checkTest() internal override returns (bool) {
+    /* Validating the test */
+    assertEq(fallout.owner(), attacker);
+
+    return (fallout.owner() == attacker);
+  }
 }

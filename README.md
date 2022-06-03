@@ -16,3 +16,4 @@ TODO:
 
 - [x] Switch to solidity 0.6.0
 - [ ] Finish solving all levels
+- [ ] Create a "make" file 

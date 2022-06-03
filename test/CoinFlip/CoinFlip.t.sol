@@ -42,7 +42,7 @@ contract CoinFlipTest is LevelFactory {
     super._setupTest();
   } 
 
-  function _checkTest() internal override returns(bool) {
+  function _checkTest() internal override returns (bool) {
     assertGe(coinflip.consecutiveWins(), 10);
 
     return (coinflip.consecutiveWins() >= 10);

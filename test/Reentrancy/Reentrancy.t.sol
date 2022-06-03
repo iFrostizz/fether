@@ -72,7 +72,6 @@ contract ReentrancyTest is LevelFactory {
   }
 
   function _setupTest() internal override {
-    vm.startPrank(attacker);
     vm.deal(attacker, 5 ether);
   }
 

@@ -41,6 +41,8 @@ contract GatekeeperOneTest is LevelFactory {
       }
       }*/
 
+     emit log_named_bytes("Logino", abi.encodePacked(bytes8(0x0000000000000000)));
+
     bytes8 key = 0x4141410000000065; // TODO: apply a mask the clean way!
     uint i = 3397;
     (bool worked,) = gateProxy.call.gas(i + 100000)(abi.encodeWithSignature("enter(address,bytes8)", gatekeeperOne, key));

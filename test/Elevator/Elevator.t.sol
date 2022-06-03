@@ -50,7 +50,7 @@ contract ElevatorTest is LevelFactory {
   }
 
   function _setupTest() internal override {
-    vm.startPrank(attacker);
+    super._setupTest();
   }
 
   function _checkTest() internal override returns (bool) {

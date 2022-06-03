@@ -9,9 +9,16 @@ contract LevelFactory is FetherTestSuite {
   bool defaultVal = false;
 
   function submitLevel(string memory level) public {
+    vm.stopPrank();
     emit log_named_string("LevelFactory::Starting to test", level);
+
+    vm.startPrank(deployer, deployer);
     _setupTest();
+    vm.stopPrank();
+
+    vm.startPrank(attacker, attacker);
     _performTest();
+
     bool completed = _checkTest();
     if (completed) {
       emit log("LevelFactory::Completed test ✓");
@@ -21,9 +28,7 @@ contract LevelFactory is FetherTestSuite {
     fail();
   }
 
-  function _setupTest() internal virtual {
-    vm.startPrank(attacker, attacker);
-  }
+  function _setupTest() internal virtual {}
 
   function _performTest() internal virtual {}
 

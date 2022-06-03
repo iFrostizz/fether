@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+import {LevelFactory} from "../utils/LevelFactory.sol";
+import {SampleLevel} from "../../src/SampleLevel/Level.sol";
+
+interface ISample {}
+
+contract SampleLevelTest is LevelFactory {
+  ISample sample; 
+
+  function setUp() public {}
+
+  function testAttack() public {
+    submitLevel("SampleLevel");
+  }
+
+  function _performTest() internal override {}
+
+  function _setupTest() internal override {
+    super._setupTest();
+  }
+
+  function _checkTest() internal override returns (bool) {}
+}

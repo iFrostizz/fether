@@ -33,8 +33,6 @@ contract DexTest is LevelFactory {
   }
 
   function _performTest() internal override {
-    super._performTest();
-
     weth.approve(address(dex), uint(-1));
     fether.approve(address(dex), uint(-1));
 

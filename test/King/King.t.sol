@@ -31,10 +31,11 @@ contract KingTest is LevelFactory {
     IKingDos kingDos;
 
     function setUp() public {
-        vm.prank(deployer); // deploy the contract as deployer
+        vm.startPrank(deployer); // deploy the contract as deployer
         vm.deal(deployer, 5 ether);
         king = IKing(address((new King).value(1 ether)()));
         kingDos = IKingDos(address(new KingDOS()));
+        vm.stopPrank();
     }
 
     function testAttack() public {

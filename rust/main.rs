@@ -1,8 +1,8 @@
 use inquire::Select;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::fs::File;
 use std::io::BufReader;
-use std::collections::HashMap;
 // use std::process::Command;
 // use std::env;
 
@@ -15,6 +15,7 @@ struct Level {
 
 fn main() {
     let options = vec![
+        "Quit",
         "0. Hello Fether",
         "1. Fallback",
         "2. Fallout",
@@ -44,21 +45,28 @@ fn main() {
         "26. DoubleEntryPoint",
     ];
 
-    let ans = Select::new("Choose a level", options).prompt();
+    let ans = Select::new("Choose a level", options)
+        .with_vim_mode(true)
+        .prompt();
 
     match ans {
-        Ok(choice) => handle_level(choice),
+        Ok(choice) => {
+            if choice == "Quit" {
+                return;
+            }
+            handle_level(choice)
+        }
         Err(_) => println!("There was an error, please try again"),
     }
 }
 
 fn handle_level(level: &str) {
-    let ans = Select::new("Chose an action", vec![
-        "Read description",
-        "Hack it",
-        "Get an hint",
-        // "Quit",
-    ]).prompt();
+    let ans = Select::new(
+        "Chose an action",
+        vec!["Read description", "Hack it", "Get an hint", "Quit"],
+    )
+    .with_vim_mode(true)
+    .prompt();
 
     match ans {
         Ok(choice) => handle_action(level, choice),
@@ -75,16 +83,18 @@ fn handle_level(level: &str) {
 fn handle_action(level: &str, action: &str) {
     let file: File = File::open("./rust/descriptions.json").unwrap();
     let reader: BufReader<File> = BufReader::new(file);
-    let file_result: HashMap<String, Level> = serde_json::from_reader(reader).expect("couldn't parse file");
+    let file_result: HashMap<String, Level> =
+        serde_json::from_reader(reader).expect("couldn't parse file");
 
-    println!("Name: {}", file_result[level].name);
-    println!("difficulty: {}/10\n", file_result[level].difficulty);
+    // println!("Name: {}", file_result[level].name);
+    // println!("difficulty: {}/10\n", file_result[level].difficulty);
 
     match action {
         "Read description" => println!("Description: {}\n", file_result[level].description),
         "Hack it" => hack_level(),
         "Get an hint" => get_hint(),
-        _ => panic!("This choice doesn't exist")
+        "Quit" => return,
+        _ => panic!("This choice doesn't exist"),
     }
 
     handle_level(level);
@@ -97,3 +107,4 @@ fn hack_level() {
 fn get_hint() {
     println!("Let's get an hint!\n");
 }
+

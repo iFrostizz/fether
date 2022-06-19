@@ -7,19 +7,19 @@ import {SampleLevel} from "../../src/SampleLevel/Level.sol";
 interface ISample {}
 
 contract SampleLevelTest is LevelFactory {
-  ISample sample; 
+    ISample sample; 
 
-  function setUp() public {}
+    function setUp() public {}
 
-  function testAttack() public {
-    submitLevel("SampleLevel");
-  }
+    function testAttack() public {
+        submitLevel("SampleLevel");
+    }
 
-  function _performTest() internal override {}
+    function _performTest() internal override {}
 
-  function _setupTest() internal override {
-    super._setupTest();
-  }
+    function _setupTest() internal override {
+        super._setupTest();
+    }
 
-  function _checkTest() internal override returns (bool) {}
+    function _checkTest() internal override returns (bool) {}
 }

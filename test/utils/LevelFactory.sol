@@ -20,6 +20,7 @@ contract LevelFactory is FetherTestSuite {
     _performTest();
 
     bool completed = _checkTest();
+    vm.stopPrank();
     if (completed) {
       emit log("LevelFactory::Completed test ✓");
       return;

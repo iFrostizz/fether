@@ -3,8 +3,6 @@ pragma solidity ^0.6.0;
 
 import '@openzeppelin/contracts/math/SafeMath.sol';
 
-import "forge-std/console2.sol";
-
 contract Denial {
 
   using SafeMath for uint256;
@@ -19,7 +17,6 @@ contract Denial {
 
   // withdraw 1% to recipient and 1% to owner
   function withdraw() public {
-    console2.log("Yop");
     uint amountToSend = address(this).balance.div(100);
     // perform a call without checking return
     // The recipient can revert, the owner will still get their share

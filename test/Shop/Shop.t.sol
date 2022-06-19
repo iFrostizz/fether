@@ -21,7 +21,8 @@ contract FakeBuyer {
   }
 
   function buy(address shop) external {
-    shop.call(abi.encodeWithSignature("buy()"));
+    (bool status,) = shop.call(abi.encodeWithSignature("buy()"));
+    status;
   }
 }
 
@@ -41,7 +42,8 @@ contract ShopTest is LevelFactory {
   function _performTest() internal override {
    address fakeBuyer = address(new FakeBuyer());
    emit log_address(fakeBuyer);
-   fakeBuyer.call(abi.encodeWithSignature("buy(address)", address(shop)));
+   (bool status,) = fakeBuyer.call(abi.encodeWithSignature("buy(address)", address(shop)));
+   status;
   }
 
   function _setupTest() internal override {

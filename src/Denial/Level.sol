@@ -20,7 +20,8 @@ contract Denial {
         uint amountToSend = address(this).balance.div(100);
         // perform a call without checking return
         // The recipient can revert, the owner will still get their share
-        partner.call.value(amountToSend)("");
+        (bool status,) = partner.call.value(amountToSend)("");
+	status;
         owner.transfer(amountToSend);
         // keep track of last withdrawal time
         timeLastWithdrawn = now;
